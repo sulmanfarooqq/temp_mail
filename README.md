@@ -4,6 +4,27 @@
 
 **tempmail-python** is a Python library for generating and managing temporary email addresses using the mail.tm service. It provides functions for creating email addresses, checking for new messages, and retrieving message contents.
 
+## Getting Started
+
+### Clone the repository
+
+```bash
+git clone https://github.com/sulmanfarooqq/temp_mail.git
+cd temp_mail
+```
+
+### Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Run the test script
+
+```bash
+python test_tempmail.py
+```
+
 ## Installation
 You can install tempmail-python using pip:
 ```bash

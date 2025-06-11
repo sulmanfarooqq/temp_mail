@@ -2,7 +2,7 @@
 
 [![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads)
 
-**tempmail-python** is a Python library for generating and managing temporary email addresses using the 1secmail service. It provides functions for creating email addresses, checking for new messages, and retrieving message contents.
+**tempmail-python** is a Python library for generating and managing temporary email addresses using the mail.tm service. It provides functions for creating email addresses, checking for new messages, and retrieving message contents.
 
 ## Installation
 You can install tempmail-python using pip:
@@ -19,75 +19,39 @@ pip install git+https://github.com/cubicbyte/tempmail-python.git
 
 Receive a message (e.g. activation code)
 ```python
-from tempmail import EMail
+from tempmail.mailtm_provider import MailTmProvider
 
-email = EMail()
-print(email.address)  # qwerty123@1secmail.com
+email = MailTmProvider()
+print(email.account["address"])  # e.g. abc123@punkproof.com
 
 # ... request some email ...
 
 msg = email.wait_for_message()
-print(msg.body)  # Hello World!\n
+print(msg.text)  # Email body text
 ```
 
 Get all messages in the inbox
 ```python
-from tempmail import EMail
+from tempmail.mailtm_provider import MailTmProvider
 
-email = EMail('example@1secmail.com')
+email = MailTmProvider()
 inbox = email.get_inbox()
 
-for msg_info in inbox:
-    print(msg_info.subject, msg_info.message.body)
+for msg in inbox:
+    print(msg.subject, msg.text)
 ```
 
-Download an attachment
+Wait for a message with a filter and timeout
 ```python
-from tempmail import EMail
+from tempmail.mailtm_provider import MailTmProvider
 
-email = EMail(username='example', domain='1secmail.com')
-msg = email.wait_for_message()
+email = MailTmProvider()
 
-if msg.attachments:
-    attachment = msg.attachments[0]
-    data = attachment.download()
+def filter_hello_world(msg):
+    return msg.subject == 'Hello World!'
 
-    # Print
-    print(data)  # b'Hello World!\n'
-    print(data.decode('utf-8'))  # Hello World!\n
-
-    # Save to file
-    with open(attachment.filename, 'wb') as f:
-        f.write(data)
-```
-
-Get reddit activation code
-```python
-from tempmail import EMail
-
-def reddit_filter(msg):
-    return (msg.from_addr == 'noreply@reddit.com' and
-            msg.subject == 'Verify your Reddit email address')
-
-email = EMail(address='redditaccount@1secmail.com')
-msg = email.wait_for_message(filter=reddit_filter)
-# get_activation_code(html=msg.html_body)
-```
-
-Some other features:
-```python
-from tempmail.providers import OneSecMail
-
-email = OneSecMail()
-
-# request_email(email=email.address)
-
-# Speed up inbox refresh rate
-OneSecMail.inbox_update_interval = 0.1  # every 100ms
-
-# Accept only emails with a specific subject, raise error after 60 seconds
-msg = email.wait_for_message(timeout=60, filter=lambda m: m.subject == 'Hello World!')
-print(msg.body)
+msg = email.wait_for_message(timeout=60, filter=filter_hello_world)
+print(msg.text)
 ```
 
 ## License

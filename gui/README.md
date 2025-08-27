@@ -39,6 +39,14 @@ If you prefer to install manually:
 5. Received emails appear in the messages list
 6. Click on any message to view its content
 
+## Troubleshooting
+
+If you encounter issues:
+
+1. Make sure Python is installed and added to your PATH
+2. Run `setup_gui.bat` as administrator if you get permission errors
+3. Check that requirements are installed with `pip install -r ../requirements.txt`
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.

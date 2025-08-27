@@ -2,94 +2,50 @@
 
 [![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads)
 
-**tempmail-python** is a Python library for generating and managing temporary email addresses using the mail.tm service. It provides functions for creating email addresses, checking for new messages, and retrieving message contents.
+**tempmail-python** is a Python library for generating and managing temporary email addresses using temporary email services. It provides functions for creating email addresses, checking for new messages, and retrieving message contents.
 
-## Getting Started
+## Features
 
-### Clone the repository
+- Generate temporary email addresses
+- Monitor inbox for new messages
+- Retrieve message contents
+- Desktop GUI application for easy use
 
-```bash
-git clone https://github.com/sulmanfarooqq/temp_mail.git
-cd temp_mail
-```
-
-### Install dependencies
+## Installation
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Run the test script
+## Usage
 
-```bash
-python test_tempmail.py
-```
+### Command Line
 
-## Installation
-You can install tempmail-python using pip:
-```bash
-pip install tempmail-python
-```
-
-Or you can install it from source:
-```bash
-pip install git+https://github.com/cubicbyte/tempmail-python.git
-```
-
-## Examples
-
-Receive a message (e.g. activation code)
 ```python
-from tempmail.mailtm_provider import MailTmProvider
+from tempmail import EMail
 
-email = MailTmProvider()
-print(email.account["address"])  # e.g. abc123@punkproof.com
+email = EMail()
+print(email.address)  # e.g. abc123@1secmail.com
 
-# ... request some email ...
-
+# Wait for a message
 msg = email.wait_for_message()
-print(msg.text)  # Email body text
+print(msg.text_body)  # Email body text
 ```
 
-Get all messages in the inbox
-```python
-from tempmail.mailtm_provider import MailTmProvider
+### GUI Application
 
-email = MailTmProvider()
-inbox = email.get_inbox()
+For a desktop application with a graphical interface:
 
-for msg in inbox:
-    print(msg.subject, msg.text)
-```
+1. Navigate to the `gui` directory
+2. Run `create_shortcut.py` to create a desktop shortcut (Windows)
+3. Double-click the "TempMail" icon on your desktop to start the application
 
-Wait for a message with a filter and timeout
-```python
-from tempmail.mailtm_provider import MailTmProvider
-
-email = MailTmProvider()
-
-def filter_hello_world(msg):
-    return msg.subject == 'Hello World!'
-
-msg = email.wait_for_message(timeout=60, filter=filter_hello_world)
-print(msg.text)
+Or run directly:
+```bash
+cd gui
+python tempmail_gui.py
 ```
 
 ## License
+
 tempmail-python is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
-Contribution: 2025-06-11 00:00
-
-Contribution: 2025-06-11 00:30
-
-Contribution: 2025-06-01 00:00
-
-Contribution: 2025-06-02 00:00
-
-Contribution: 2025-06-04 00:00
-
-Contribution: 2025-06-04 00:30
-
-Contribution: 2025-06-24 00:00
-
-Contribution: 2025-06-24 00:30
-

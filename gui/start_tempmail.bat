@@ -1,6 +1,7 @@
 @echo off
 cd /d "%~dp0"
-python tempmail_gui.py
+cd ..
+python -m gui.tempmail_gui
 if %errorlevel% neq 0 (
     echo.
     echo Failed to start the application.

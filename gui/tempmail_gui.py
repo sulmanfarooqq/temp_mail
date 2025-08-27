@@ -4,8 +4,13 @@ import threading
 import time
 from datetime import datetime
 import pyperclip
+import sys
+import os
 
-from tempmail import EMail
+# Add the parent directory to the Python path so we can import tempmail
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
+from tempmail.mailtm_provider import MailTmProvider
 
 
 class TempMailGUI:
@@ -114,9 +119,9 @@ class TempMailGUI:
             self.status_var.set("Creating email address...")
             self.root.update_idletasks()
             
-            # Using 1secmail provider (default) for better compatibility
-            self.email_provider = EMail()
-            self.email_address = self.email_provider.address
+            # Using Mail.tm provider for better reliability
+            self.email_provider = MailTmProvider()
+            self.email_address = self.email_provider.account["address"]
             self.email_var.set(self.email_address)
             
             self.status_var.set(f"Email created: {self.email_address}")
@@ -202,8 +207,7 @@ class TempMailGUI:
             
             # Add messages to UI
             self.received_messages = []
-            for msg_info in inbox:
-                msg = msg_info.message
+            for msg in inbox:
                 self.received_messages.append(msg)
                 self.add_message_to_ui(msg)
             
@@ -218,7 +222,7 @@ class TempMailGUI:
         try:
             date_str = msg.date.strftime("%Y-%m-%d %H:%M")
         except:
-            date_str = msg.date_str if hasattr(msg, 'date_str') else "Unknown"
+            date_str = "Unknown"
         
         # Insert into treeview
         self.messages_tree.insert("", 0, values=(
@@ -239,7 +243,7 @@ class TempMailGUI:
                 if 0 <= index < len(self.received_messages):
                     msg = self.received_messages[index]
                     # Display message content
-                    content = msg.text_body if msg.text_body else msg.html_body if msg.html_body else msg.body
+                    content = msg.text if msg.text else msg.html if msg.html else "No content"
                     self.message_text.delete(1.0, tk.END)
                     self.message_text.insert(tk.END, content)
     
